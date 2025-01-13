@@ -18,5 +18,14 @@ It will have like seven Tables and game(soon). This application is on building p
 ## creating requirement
     pip freeze > requirements.txt
     pip install -r requirements.txt
+## creating migration
+    python manage.py makemigrations
+    python manage.py makemigrations myapp
+## applying migration
+    python manage.py migrate
+    python manage.py migrate myapp
+
+
+
 
 
