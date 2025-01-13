@@ -2,7 +2,7 @@ from django.db import models
 
 class Student (models.Model):
     username = models.CharField(max_length=20, unique=True)
-    password = models.CharField(max_length=120)
+    password = models.CharField(max_length=120)ff
     registration_date = models.DateField(auto_now_add=True)
 
     def __str__(self):
