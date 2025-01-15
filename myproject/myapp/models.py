@@ -66,13 +66,19 @@ class Ranking (models.Model):
     def __str__(self):
         return f"{self.username.username}' Ranking"
     
-class message (models.Model):
+class Message (models.Model):
     parent_name = models.CharField(max_length=30 )
     message = models.TextField(null=False , blank=False)
     phone_number = models.CharField(max_length=15)
 
     def __str__(self):
         return f"{self.parent_name}: {self.message}"
+    
+    pass
+
+class Game (models.Model) :
+
+    pass
     
 
 
