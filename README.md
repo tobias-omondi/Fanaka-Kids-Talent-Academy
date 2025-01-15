@@ -24,6 +24,10 @@ It will have like seven Tables and game(soon). This application is on building p
 ## applying migration
     python manage.py migrate
     python manage.py migrate myapp
+## run development server
+    python manage.py runserver
+## creating admin user 
+    python manage.py createsuperuser
 
 
 
