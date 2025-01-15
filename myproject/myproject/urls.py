@@ -11,4 +11,5 @@ urlpatterns = [
     path('events/', views.events, name='events'),
     path('ranking/', views.ranking, name='ranking'),
     path('message/', views.message, name='message'),
+    # path('api-auth/', include('rest_framework.urls')),
 ]
