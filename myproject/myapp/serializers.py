@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Student , Image_Gallery , Videos_Gallery, Blog, Events ,Message , Game , Ranking 
+from django.contrib.auth.hashers import make_password
 
 class studentsSerializer (serializers.ModelSerializer):
     class Meta:
