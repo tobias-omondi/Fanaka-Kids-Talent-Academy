@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import Students , Image_Gallery , Videos_Gallery, Blog, Events ,Message , Game , Ranking 
+from .models import Student , Image_Gallery , Videos_Gallery, Blog, Events ,Message , Game , Ranking 
 
 class studentsSerializer (serializers.ModelSerializer):
     class Meta:
-        model = Students
+        model = Student
         fields = '__all__'
 
 class imagesSerializer (serializers.ModelSerializer):
