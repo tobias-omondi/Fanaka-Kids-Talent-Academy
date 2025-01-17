@@ -1,4 +1,7 @@
 from django.db import models
+# from django.utils.timezone import now
+# from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 
 class Student (models.Model):
     username = models.CharField(max_length=20, unique=True)
@@ -65,20 +68,43 @@ class Ranking (models.Model):
 
     def __str__(self):
         return f"{self.username.username}' Ranking"
+
     
 class Message (models.Model):
     parent_name = models.CharField(max_length=30 )
     message = models.TextField(null=False , blank=False)
-    phone_number = models.CharField(max_length=15)
+    phone_number = models.CharField( max_length=15,
+     validators=[RegexValidator(r'^\+?1?\d{9,15}$', 'Enter a valid phone number.')]
+    )
 
     def __str__(self):
         return f"{self.parent_name}: {self.message}"
     
-    pass
 
-class Game (models.Model) :
+# class Game (models.Model) :
+#     PLAYER_CHOICES = [
+#         ('AI', 'Artificial Intelligence'),
+#         ('PLAYER', 'Another Player'),
+#     ]
+#     student = models.ForeignKey(Student, related_name ='chess_games', on_delete=models.CASCADE)
+#     opponent_type = models.CharField(max_length=10, choices=PLAYER_CHOICES)
+#     opponent = models.ForeignKey (Student, null=True , blank=True , on_delete=models.SET_NULL , related_name= 'oppenents_games' )
+#     result_choices = [
+#         ('WIN', 'Win'),
+#         ('LOSS', 'Loss'),
+#         ('DRAW', 'Draw'),
+#     ]
+#     results = models.CharField(max_length=5, choices=result_choices)
+#     date_played = models.DateTimeField(default=now) 
 
-    pass
+    
+#     def __str__(self):
+#         return f"Game on {self.date_played} - {self.student.username} vs {self.opponent_type}"
+
+#     class Meta:
+#         ordering = ['-date_played']  
+
+
     
 
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Student , Image_Gallery , Videos_Gallery, Blog, Events ,Message , Game , Ranking 
+from .models import Student , Image_Gallery , Videos_Gallery, Blog, Events ,Message , Ranking 
 from django.contrib.auth.hashers import make_password
 
 class studentsSerializer (serializers.ModelSerializer):
@@ -42,7 +42,7 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class GameSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Game
-        fields = '__all__'
+# class GameSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Game
+#         fields = '__all__'
