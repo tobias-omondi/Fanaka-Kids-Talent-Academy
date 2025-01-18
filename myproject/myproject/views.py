@@ -1,8 +1,12 @@
+import qrcode.constants
 from myapp.serializers import studentsSerializer , imagesSerializer , VideosSerializer , BlogSerializer , EventsSerializer , MessageSerializer , RankingSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from myapp.models import Student , Image_Gallery , Videos_Gallery , Blog , Events , Message , Ranking
+import qrcode
+from io import BytesIO
+from django.http import HttpResponse
 
 @api_view(['GET'])
 def homepage(request):
@@ -109,3 +113,22 @@ def ranking (request):
         if serializer.is_valid():serializer.save()
         return Response (serializer.data , status=status.HTTP_201_CREATED)
     return Response (serializer.data , status=status.HTTP_400_BAD_REQUEST)
+
+# qrcode for the website
+
+def qr_code(request):
+    data = "/"  # the link to our website
+    qr = qrcode.QRCode(
+        version=2,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=8,
+        border=4,
+    )
+    qr.add_data(data)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    # Serve the QR code as an image response
+    response = HttpResponse(content_type="image/png")
+    img.save(response, "PNG")
+    return response

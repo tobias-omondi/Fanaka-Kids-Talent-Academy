@@ -13,4 +13,5 @@ urlpatterns = [
     path('ranking/', views.ranking, name='ranking'),
     path('message/', views.message, name='message'),
     path('api-auth/', include('rest_framework.urls')),
+     path('qr-code/', views.qr_code, name='qr_code'),
 ]
