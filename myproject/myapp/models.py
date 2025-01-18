@@ -2,16 +2,23 @@ from django.db import models
 # from django.utils.timezone import now
 # from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+from django.contrib.auth.hashers import make_password
 
 class Student (models.Model):
+    # fullname = models.CharField(max_length=120)
+    email = models.EmailField(max_length=254, null=True, blank=True)
     username = models.CharField(max_length=20, unique=True)
-    password = models.CharField(max_length=120)
+    password = models.CharField(max_length=128)
     registration_date = models.DateField(auto_now_add=True)
+
+    def save(self , *args, **kwargs):
+        if not self.pk: #hashing on creation
+            self.password = make_password (self.password)
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return self.username
 
-    pass
 
 class Image_Gallery (models.Model):
     title = models.CharField(max_length=30, null=True, blank=True)
