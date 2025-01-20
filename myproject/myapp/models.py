@@ -64,17 +64,26 @@ class Events (models.Model):
 
     pass
 
-class Ranking (models.Model):
-    username = models.ForeignKey(Student, related_name='ranking', on_delete=models.CASCADE)
-    game_played = models.IntegerField()
-    games_won = models.IntegerField()
-    games_lost = models.IntegerField()
-    games_drawn = models.IntegerField()
-    point_taken = models.IntegerField()
-    rank = models.IntegerField()
+class Ranking(models.Model):
+    username = models.ForeignKey(Student, related_name='rankings', on_delete=models.CASCADE)
+    games_played = models.IntegerField(default=0)
+    games_won = models.IntegerField(default=0)
+    games_lost = models.IntegerField(default=0)
+    games_drawn = models.IntegerField(default=0)
+    points_taken = models.IntegerField(default=0)
+    rank = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.username.username}' Ranking"
+        return f"{self.username.username}'s Ranking"
+
+    @property
+    def win_ratio(self):
+        total_games = self.games_won + self.games_lost + self.games_drawn
+        return self.games_won / total_games if total_games > 0 else 0
+
+    @property
+    def total_points(self):
+        return self.games_won * 3 + self.games_drawn  # 3 points for a win and 1 for a draw
 
     
 class Message (models.Model):
@@ -87,30 +96,6 @@ class Message (models.Model):
     def __str__(self):
         return f"{self.parent_name}: {self.message}"
     
-
-# class Game (models.Model) :
-#     PLAYER_CHOICES = [
-#         ('AI', 'Artificial Intelligence'),
-#         ('PLAYER', 'Another Player'),
-#     ]
-#     student = models.ForeignKey(Student, related_name ='chess_games', on_delete=models.CASCADE)
-#     opponent_type = models.CharField(max_length=10, choices=PLAYER_CHOICES)
-#     opponent = models.ForeignKey (Student, null=True , blank=True , on_delete=models.SET_NULL , related_name= 'oppenents_games' )
-#     result_choices = [
-#         ('WIN', 'Win'),
-#         ('LOSS', 'Loss'),
-#         ('DRAW', 'Draw'),
-#     ]
-#     results = models.CharField(max_length=5, choices=result_choices)
-#     date_played = models.DateTimeField(default=now) 
-
-    
-#     def __str__(self):
-#         return f"Game on {self.date_played} - {self.student.username} vs {self.opponent_type}"
-
-#     class Meta:
-#         ordering = ['-date_played']  
-
 
     
 
