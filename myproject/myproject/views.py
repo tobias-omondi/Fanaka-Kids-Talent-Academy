@@ -28,7 +28,7 @@ def students(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE':
-        student_id = request.data.get('id')  # Assuming you send an ID in your request body
+        student_id = request.data.get('id')  
     try:
         student = Student.objects.get(id=student_id)
         student.delete()
@@ -39,7 +39,7 @@ def students(request):
 
 
 
-@api_view(['GET','POST', 'DELETE' , 'DELETE'])
+@api_view(['GET','POST', 'DELETE'])
 def image_gallery (request):
     if request.method == 'GET':
         images = Image_Gallery.objects.all()  # fetching all images data
