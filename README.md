@@ -5,7 +5,7 @@ It will have like seven Tables and game(soon). This application is on building p
 
 ## To Get started.
     GIT CLONE THE PROJECT.
-    cd... the project
+    cd myproject
     
 ## Enivroment
     python3 -m venv myenv
