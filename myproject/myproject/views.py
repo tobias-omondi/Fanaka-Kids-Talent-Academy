@@ -13,21 +13,33 @@ def homepage(request):
     return Response({'message': 'Welcome to fanaka kids talent academy'})
 
 
-@api_view(['GET','POST'])
+@api_view(['GET','POST','DELETE'])
 def students(request):
     if request.method == 'GET':
         students = Student.objects.all()   # we are initializing our student then serializing to give as unique data of each objects
         serializer = studentsSerializer(students, many = True)
         return Response(serializer.data)
+    
     elif request.method == 'POST':
         serializer = studentsSerializer(data =request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        student_id = request.data.get('id')  # Assuming you send an ID in your request body
+    try:
+        student = Student.objects.get(id=student_id)
+        student.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except Student.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
 
 
-@api_view(['GET','POST'])
+
+@api_view(['GET','POST', 'DELETE' , 'DELETE'])
 def image_gallery (request):
     if request.method == 'GET':
         images = Image_Gallery.objects.all()  # fetching all images data
@@ -41,9 +53,19 @@ def image_gallery (request):
             return Response(serializer.data , status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    return Response('images')
+    elif request.method == 'DELETE':
+        image_id = request.data.get('id')
+    try:
+        images = Image_Gallery.objects.get(id = image_id)
+        images.delete()
+        return Response (status=status.HTTP_204_NO_CONTENT)
+    except images.DoesNotExist:
+        return Response (status=status.HTTP_404_NOT_FOUND)
+    
 
-@api_view(['GET', 'POST'])
+
+
+@api_view(['GET', 'POST', 'DELETE'])
 def video_gallery(request):
     if request.method == 'GET':
         videos = Videos_Gallery.objects.all() #fetching videos table
@@ -57,33 +79,90 @@ def video_gallery(request):
             return Response(serializer.data , status = status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    elif request.method == 'DELETE':
+        videos_id = request.data.get('id')  # Get the ID from the request data
+    try:
+            video = Videos_Gallery.objects.get(id=videos_id)  
+            video.delete()  # Delete the object
+            return Response(status=status.HTTP_204_NO_CONTENT)  
+    except Videos_Gallery.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND) 
+    
 
-@api_view(['GET', 'POST'])
-def blog (request):
+
+
+@api_view(['GET', 'POST', 'DELETE', 'PUT'])
+def blog(request):
     if request.method == 'GET':
-        blogs = Blog.objects.all()
-        serializer = BlogSerializer(blogs , many = True)
-        return Response (serializer.data)
-    
+        blogs = Blog.objects.all()  
+        serializer = BlogSerializer(blogs, many=True)  
+        return Response(serializer.data) 
+
     elif request.method == 'POST':
-        serializer = BlogSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data , status = status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = BlogSerializer(data=request.data) 
+        if serializer.is_valid(): 
+            serializer.save() 
+            return Response(serializer.data, status=status.HTTP_201_CREATED) 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+    elif request.method == 'DELETE':
+        blog_post_id = request.data.get('id')  
+        try:
+            blog_post = Blog.objects.get(id=blog_post_id)  
+            blog_post.delete()  # Delete the object
+            return Response(status=status.HTTP_204_NO_CONTENT)  
+        except Blog.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)  
+
+    elif request.method == 'PUT':
+        blog_post_id = request.data.get('id') 
+        try:
+            blog_post = Blog.objects.get(id=blog_post_id) 
+            serializer = BlogSerializer(blog_post, data=request.data) 
+            if serializer.is_valid():  
+                serializer.save()  
+                return Response(serializer.data, status=status.HTTP_200_OK)  
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+        except Blog.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)  
     
-@api_view(['GET', 'POST'])
-def events (request):
+    
+    
+    
+@api_view(['GET', 'POST', 'DELETE', 'PUT'])
+def events(request):
     if request.method == 'GET':
-        events = Events.objects.all()
-        serializer = EventsSerializer(events , many = True)
-        return Response (serializer.data)
-    
+        events = Events.objects.all()  
+        serializer = EventsSerializer(events, many=True)  
+        return Response(serializer.data)  
+
     elif request.method == 'POST':
-        serializer = EventsSerializer(data = request.data)
-        if serializer.is_valid():serializer.save
-        return Response (serializer.data ,status=status.HTTP_201_CREATED)
-    return Response (serializer.data , status=status.HTTP_400_BAD_REQUEST)
+        serializer = EventsSerializer(data=request.data) 
+        if serializer.is_valid(): 
+            serializer.save()  
+            return Response(serializer.data, status=status.HTTP_201_CREATED)  
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+
+    elif request.method == 'DELETE':
+        event_id = request.data.get('id')  
+        try:
+            event = Events.objects.get(id=event_id)  
+            event.delete()  
+            return Response(status=status.HTTP_204_NO_CONTENT)  
+        except Events.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND) 
+
+    elif request.method == 'PUT':
+        event_id = request.data.get('id')  
+        try:
+            event = Events.objects.get(id=event_id) 
+            serializer = EventsSerializer(event, data=request.data) 
+            if serializer.is_valid(): 
+                serializer.save()  
+                return Response(serializer.data, status=status.HTTP_200_OK) 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+        except Events.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)  # Return not found if the object does not exist
             
 
 @api_view(['GET', 'POST'])
@@ -99,7 +178,7 @@ def message (request):
         return Response (serializer.data , status=status.HTTP_201_CREATED)
     return Response (serializer.data , status=status.HTTP_400_BAD_REQUEST)
 
-    return Response('message')
+
 
 @api_view(['GET', 'POST'])
 def ranking (request):
