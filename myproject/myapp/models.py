@@ -20,25 +20,24 @@ class Student (models.Model):
         return self.username
 
 
-class Image_Gallery (models.Model):
+class Image_Gallery(models.Model):
     title = models.CharField(max_length=30, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='gallery_images/')
 
     def __str__(self):
-        return self.title
+        return self.title or self.image.name or "Untitled Image"
 
-    pass
 
-class Videos_Gallery (models.Model):
+class Videos_Gallery(models.Model):
     title = models.CharField(max_length=30, null=True, blank=True)
-    description = models.TextField(null=True, blank=True )
-    Videos = models.FileField(upload_to='videos_gallery/')
+    description = models.TextField(null=True, blank=True)
+    video = models.FileField(upload_to='videos_gallery/')  # Renamed for clarity
 
     def __str__(self):
-        return self.title
+        return self.title or self.video.name or "Untitled Video"
 
-    pass
+
 
 class Blog (models.Model):
     image = models.FileField(upload_to='blog/', null=True, blank=True)
