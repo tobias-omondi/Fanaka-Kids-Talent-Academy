@@ -56,6 +56,7 @@ class Events (models.Model):
     image = models.ImageField(upload_to='events_image/')
     title = models.CharField(max_length=30)
     description = models.TextField()
+    event_date = models.TextField(max_length=20)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
 

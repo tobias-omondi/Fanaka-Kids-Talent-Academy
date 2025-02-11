@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path , include
 from .import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -14,4 +16,4 @@ urlpatterns = [
     path('message/', views.message, name='message'),
     path('api-auth/', include('rest_framework.urls')),
      path('qr-code/', views.qr_code, name='qr_code'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
