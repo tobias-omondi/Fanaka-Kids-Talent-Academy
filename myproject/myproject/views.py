@@ -174,7 +174,7 @@ def message (request):
     
     elif request.method == 'POST':
         serializer = MessageSerializer(data = request.data)
-        if serializer.is_valid:serializer.save()
+        if serializer.is_valid(): serializer.save()
         return Response (serializer.data , status=status.HTTP_201_CREATED)
     return Response (serializer.data , status=status.HTTP_400_BAD_REQUEST)
 
@@ -188,10 +188,12 @@ def ranking (request):
         return Response (serializer.data)
     
     elif request.method == 'POST':
-        serializers = MessageSerializer (data = request.data)
+        serializer = MessageSerializer (data = request.data)
         if serializer.is_valid():serializer.save()
         return Response (serializer.data , status=status.HTTP_201_CREATED)
     return Response (serializer.data , status=status.HTTP_400_BAD_REQUEST)
+
+
 
 # qrcode for the website
 
