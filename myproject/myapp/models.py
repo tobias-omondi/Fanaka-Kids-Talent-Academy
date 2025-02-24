@@ -88,11 +88,8 @@ class Ranking(models.Model):
     
 class Message (models.Model):
     parent_name = models.CharField(max_length=30 )
-    email = models.EmailField(max_length=200 , null= False , blank= False)
+    email = models.EmailField(max_length=200 , null= True , blank= True)
     message = models.TextField(null=False , blank=False)
-    phone_number = models.CharField( max_length=15,
-     validators=[RegexValidator(r'^\+?1?\d{9,15}$', 'Enter a valid phone number.')]
-    )
 
     def __str__(self):
         return f"{self.parent_name}: {self.message}"
