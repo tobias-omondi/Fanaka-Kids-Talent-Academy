@@ -7,6 +7,8 @@ from myapp.models import Student , Image_Gallery , Videos_Gallery , Blog , Event
 import qrcode
 from io import BytesIO
 from django.http import HttpResponse
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 
 @api_view(['GET'])
 def homepage(request):
@@ -214,4 +216,19 @@ def qr_code(request):
     img.save(response, "PNG")
     return response
 
-#
+
+@api_view(['POST'])
+def admin_login(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    user = authenticate(username=username, password=password)
+
+    if user and user.is_staff:  # Ensure only admin users can log in
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'is_admin': True
+        })
+    
+    return Response({'error': 'Invalid credentials or not an admin'}, status=status.HTTP_401_UNAUTHORIZED)
