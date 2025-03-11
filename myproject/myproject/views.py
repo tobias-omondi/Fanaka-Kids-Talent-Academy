@@ -94,45 +94,50 @@ def video_gallery(request):
 
 
 @api_view(['GET', 'POST', 'DELETE', 'PUT'])
-def blog(request):
+def blog(request, *args, **kwargs):
     if request.method == 'GET':
-        blogs = Blog.objects.all()  
-        serializer = BlogSerializer(blogs, many=True)  
-        return Response(serializer.data) 
+        blogs = Blog.objects.all()
+        serializer = BlogSerializer(blogs, many=True)
+        return Response(serializer.data)
 
     elif request.method == 'POST':
-        serializer = BlogSerializer(data=request.data) 
-        if serializer.is_valid(): 
-            serializer.save() 
-            return Response(serializer.data, status=status.HTTP_201_CREATED) 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
+        serializer = BlogSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        blog_post_id = request.data.get('id')  
+        blog_post_id = kwargs.get('id')
+        if not blog_post_id:  # Check if id is provided
+            return Response({"error": "ID is required for DELETE request"}, status=status.HTTP_400_BAD_REQUEST)
+        
         try:
-            blog_post = Blog.objects.get(id=blog_post_id)  
-            blog_post.delete()  # Delete the object
-            return Response(status=status.HTTP_204_NO_CONTENT)  
+            blog_post = Blog.objects.get(id=blog_post_id)
+            blog_post.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         except Blog.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)  
+            return Response({"error": "Blog post not found"}, status=status.HTTP_404_NOT_FOUND)
 
     elif request.method == 'PUT':
-        blog_post_id = request.data.get('id') 
+        blog_post_id = kwargs.get('id')
+        if not blog_post_id:  # Check if id is provided
+            return Response({"error": "ID is required for PUT request"}, status=status.HTTP_400_BAD_REQUEST)
+        
         try:
-            blog_post = Blog.objects.get(id=blog_post_id) 
-            serializer = BlogSerializer(blog_post, data=request.data) 
-            if serializer.is_valid():  
-                serializer.save()  
-                return Response(serializer.data, status=status.HTTP_200_OK)  
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+            blog_post = Blog.objects.get(id=blog_post_id)
+            serializer = BlogSerializer(blog_post, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Blog.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)  
-    
+            return Response({"error": "Blog post not found"}, status=status.HTTP_404_NOT_FOUND)
     
     
     
 @api_view(['GET', 'POST', 'DELETE', 'PUT'])
-def events(request):
+def events(request, *args, **kwargs):
     if request.method == 'GET':
         events = Events.objects.all()  
         serializer = EventsSerializer(events, many=True)  
@@ -145,8 +150,11 @@ def events(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)  
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
 
+
     elif request.method == 'DELETE':
-        event_id = request.data.get('id')  
+        event_id = kwargs.get('id') 
+        if not event_id: 
+            return Response({"error": "ID is required for DELETE request"}, status=status.HTTP_400_BAD_REQUEST) 
         try:
             event = Events.objects.get(id=event_id)  
             event.delete()  
@@ -155,7 +163,10 @@ def events(request):
             return Response(status=status.HTTP_404_NOT_FOUND) 
 
     elif request.method == 'PUT':
-        event_id = request.data.get('id')  
+        event_id = request.data.get('id')
+        if not event_id:  # Check if id is provided
+            return Response({"error": "ID is required for PUT request"}, status=status.HTTP_400_BAD_REQUEST)
+          
         try:
             event = Events.objects.get(id=event_id) 
             serializer = EventsSerializer(event, data=request.data) 
