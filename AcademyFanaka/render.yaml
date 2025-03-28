@@ -1,32 +1,14 @@
-# # render.yaml
-# services:
-#   - type: web
-#     name: your-django-app
-#     runtime: python
-#     buildCommand: "./build.sh"
-#     startCommand: "/opt/render/project/src/.venv/bin/gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout "
-#     envVars:
-#       - key: DATABASE_URL
-#         fromDatabase:
-#           name: your-django-db
-#           property: connectionString
-#       - key: SECRET_KEY
-#         generateValue: true
-#       - key: DEBUG
-#         value: "False"
-
-
-
+# render.yaml
 services:
   - type: web
     name: your-django-app
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "~/.local/bin/gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+    startCommand: "/opt/render/bin/gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
     envVars:
       - key: PORT
         value: 10000
       - key: PYTHONPATH
-        value: "/opt/render/project/src"
+        value: "/opt/render/project/src:/opt/render/lib/python3.10/site-packages"
       - key: PATH
-        value: "/opt/render/.local/bin:$PATH"
+        value: "/opt/render/bin:$PATH"

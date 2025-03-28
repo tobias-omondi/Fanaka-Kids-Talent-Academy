@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -o errexit
-set -x  # Debug mode
+set -x  # Enable debug output
 
-# System-wide install (bypass virtual env)
-pip install --user --upgrade pip
-pip install --user gunicorn==23.0.0
-pip install --user -r requirements.txt
+# System-level installation (bypasses virtualenv issues)
+python -m pip install --upgrade pip
+python -m pip install --prefix=/opt/render gunicorn==23.0.0
+python -m pip install --prefix=/opt/render -r requirements.txt
 
 # Verify installation
-echo "=== Gunicorn verification ==="
-~/.local/bin/gunicorn --version || echo "Gunicorn check failed!"
+echo "=== Verifying Gunicorn ==="
+/opt/render/bin/gunicorn --version || echo "Gunicorn verification failed!"
 
 # Django setup
 python manage.py collectstatic --noinput
