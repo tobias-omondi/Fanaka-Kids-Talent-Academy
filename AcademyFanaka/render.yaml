@@ -3,11 +3,11 @@ services:
     name: academy-fanaka
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "/opt/render/bin/gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+    startCommand: "gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: PORT
         value: 10000
       - key: PYTHON_VERSION
         value: "3.10.12"
       - key: PATH
-        value: "/opt/render/bin:$PATH"
+        value: "/usr/local/bin:/usr/bin:$PATH"
