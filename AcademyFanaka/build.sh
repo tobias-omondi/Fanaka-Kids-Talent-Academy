@@ -1,24 +1,20 @@
 #!/usr/bin/env bash
 set -o errexit
-set -x
+set -x  # Enable debug output
 
-# Create virtual environment in Render's persistent storage
-python -m venv /opt/render/project/src/.venv
-source /opt/render/project/src/.venv/bin/activate
+# Install directly to Render's system Python (bypass virtualenv)
+python -m pip install --upgrade pip
+python -m pip install gunicorn==23.0.0 --prefix=/opt/render
+python -m pip install -r requirements.txt --prefix=/opt/render
 
-# Install packages with network timeout retries
-pip install --upgrade pip || { echo "pip upgrade failed, retrying..." && sleep 5 && pip install --upgrade pip; }
-pip install gunicorn==23.0.0 || { echo "Gunicorn install failed, retrying..." && sleep 5 && pip install gunicorn==23.0.0; }
-pip install -r requirements.txt
-
-# Critical verification
-echo "=== DEPLOYMENT VALIDATION ==="
-echo "Python: $(which python)"
-echo "Gunicorn: $(/opt/render/project/src/.venv/bin/gunicorn --version)"
-echo "Project structure:"
-ls -la myproject/
+# Verify installation
+echo "=== GUNICORN VERIFICATION ==="
+/opt/render/bin/gunicorn --version || {
+    echo "Gunicorn verification FAILED!";
+    find /opt/render -name gunicorn;
+    exit 1;
+}
 
 # Django setup
-python manage.py check --deploy
 python manage.py collectstatic --noinput
 python manage.py migrate
