@@ -1,9 +1,10 @@
+# render.yaml
 services:
   - type: web
     name: your-django-app
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "/opt/render/project/src/.venv/bin/gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --timeout 180"
+    startCommand: "gunicorn myproject.wsgi:application"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -13,7 +14,3 @@ services:
         generateValue: true
       - key: DEBUG
         value: "False"
-      - key: PORT
-        value: 10000
-      - key: PYTHON_VERSION
-        value: "3.10.12"
