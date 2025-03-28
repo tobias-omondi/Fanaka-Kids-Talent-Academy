@@ -1,14 +1,13 @@
-# render.yaml
 services:
   - type: web
-    name: your-django-app
+    name: academy-fanaka
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "/opt/render/bin/gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+    startCommand: "/opt/render/project/src/.venv/bin/gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
     envVars:
       - key: PORT
         value: 10000
-      - key: PYTHONPATH
-        value: "/opt/render/project/src:/opt/render/lib/python3.10/site-packages"
-      - key: PATH
-        value: "/opt/render/bin:$PATH"
+      - key: PYTHON_VERSION
+        value: "3.10.12"
+      - key: DJANGO_SETTINGS_MODULE
+        value: "myproject.settings"
