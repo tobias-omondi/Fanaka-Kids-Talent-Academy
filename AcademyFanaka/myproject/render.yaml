@@ -3,7 +3,7 @@ services:
     name: your-django-app
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn your_project.wsgi:application --bind 0.0.0.0:$PORT --workers 4"
+    startCommand: "/opt/render/project/src/.venv/bin/gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --timeout 180"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -16,4 +16,4 @@ services:
       - key: PORT
         value: 10000
       - key: PYTHON_VERSION
-        value: "3.11.8"
+        value: "3.10.12"
